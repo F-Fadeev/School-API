@@ -1,15 +1,15 @@
+from sqlalchemy.orm import Session
 from fastapi import (
     APIRouter,
     Depends,
     status,
 )
-from sqlalchemy.orm import Session
 
 from source.api.services.crud.students.create import CreateStudentService
 from source.api.services.crud.students.delete import DeleteStudentService
 from source.api.services.crud.students.read import (
     GetFilteredStudentsService,
-    GetSpecificStudentService
+    GetSpecificStudentService,
 )
 from source.api.services.crud.students.update import UpdateStudentService
 from source.api.services.utils import get_db
@@ -64,7 +64,7 @@ def create_student(
         db=db,
         model=Student,
         scheme=student,
-        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name']
+        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name'],
     )
     return service()
 
@@ -97,6 +97,6 @@ def update_student(
         db=db,
         scheme=scheme,
         id_student=id_student,
-        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name']
+        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name'],
     )
     return service()

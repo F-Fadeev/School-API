@@ -13,10 +13,10 @@ class StudentScheme(BaseModel):
 
 
 class StudentCreateScheme(BaseModel):
-    group_id: int | None
-    first_name: str
-    last_name: str
-    middle_name: str
+    group_id: int = Field(default=None)
+    first_name: str = Field(max_length=100)
+    last_name: str = Field(max_length=100)
+    middle_name: str = Field(max_length=100, default=None)
 
 
 class StudentUpdateScheme(BaseModel):

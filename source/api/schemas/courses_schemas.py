@@ -10,12 +10,12 @@ class CourseScheme(BaseModel):
 
 
 class CourseCreateScheme(BaseModel):
-    name: str
-    description: str = Field(default=None)
+    name: str = Field(max_length=20)
+    description: str = Field(default=None, max_length=250)
 
 
 class CourseUpdateScheme(BaseModel):
-    name: str = Field(default=None)
-    description: str = Field(default=None)
+    name: str = Field(default=None, max_length=20)
+    description: str = Field(default=None, max_length=250)
 
 

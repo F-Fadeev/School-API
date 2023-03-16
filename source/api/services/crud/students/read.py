@@ -1,11 +1,12 @@
 from typing import Any
 
+from fastapi import HTTPException, status
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
-from source.api.schemas.students_schemas import StudentFilters
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Course
+from source.api.schemas.students_schemas import StudentFilters
 
 
 class GetFilteredStudentsService(BaseServices):
@@ -18,17 +19,15 @@ class GetFilteredStudentsService(BaseServices):
 
     def _execute(self) -> Any:
         filters = self.filter_param.dict(exclude_none=True)
-        query = select(self.model)
-        if filters:
-            query_filter = []
-            for key in filters:
-                if key in {'first_name', 'last_name', 'middle_name'}:
-                    query_filter.append(getattr(self.model, key).ilike(f'%{filters[key]}%'))
-                elif key == 'group_id':
-                    query_filter.append(self.model.group_id == filters[key])
-                elif key == 'course_id':
-                    query_filter.append(self.model.courses.any(Course.id == filters[key]))
-            query = query.filter(and_(*query_filter))
+        query_filter = []
+        for key in filters:
+            if key in {'first_name', 'last_name', 'middle_name'}:
+                query_filter.append(getattr(self.model, key).ilike(f'%{filters[key]}%'))
+            elif key == 'group_id':
+                query_filter.append(self.model.group_id == filters[key])
+            elif key == 'course_id':
+                query_filter.append(self.model.courses.any(Course.id == filters[key]))
+        query = select(self.model).filter(and_(*query_filter))
         return self.db.execute(query).scalars().all()
 
 
@@ -38,10 +37,16 @@ class GetSpecificStudentService(BaseServices):
         self.student_id = student_id
 
     def _validate(self) -> None:
-        pass
+        data = select(self.model).filter(self.model.id == self.student_id)
+        group = self.db.execute(data).scalar_one_or_none()
+        if not group:
+            raise HTTPException(
+                detail='Student not found',
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
 
     def _execute(self) -> Any:
-        query = select(self.model).where(self.model.id == self.student_id)
+        query = select(self.model).filter(self.model.id == self.student_id)
         return self.db.execute(query).scalars().first()
 
 

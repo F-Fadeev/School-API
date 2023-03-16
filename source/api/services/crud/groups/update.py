@@ -1,11 +1,11 @@
 from fastapi import HTTPException, status
-from sqlalchemy import update, select
+from sqlalchemy import update, select, Row, RowMapping, Sequence
 from sqlalchemy.orm import Session
 
-from source.api.schemas.groups_schemas import GroupUpdateScheme
-from source.api.schemas.students_schemas import StudentsIdsScheme
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Student
+from source.api.schemas.students_schemas import StudentsIdsScheme
+from source.api.schemas.groups_schemas import GroupUpdateScheme
 
 
 class UpdateGroupService(BaseServices):
@@ -15,7 +15,7 @@ class UpdateGroupService(BaseServices):
         model: Model,
         return_values: list[str],
         scheme: GroupUpdateScheme,
-        id_group: int
+        id_group: int,
     ) -> None:
         super().__init__(db, model)
         self.return_values = return_values
@@ -23,9 +23,15 @@ class UpdateGroupService(BaseServices):
         self.id_group = id_group
 
     def _validate(self) -> None:
-        pass
+        data = select(self.model).filter(self.model.id == self.id_group)
+        group = self.db.execute(data).scalar_one_or_none()
+        if not group:
+            raise HTTPException(
+                detail='Group not found',
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
 
-    def _execute(self):
+    def _execute(self) -> Row | None:
         fields = [getattr(self.model, value) for value in self.return_values]
         scheme = self.scheme.dict(exclude_none=True)
         if scheme:
@@ -35,6 +41,7 @@ class UpdateGroupService(BaseServices):
             result = self.db.execute(data).one()
             self.db.commit()
             return result
+        return None
 
 
 class EnrollStudentsService(BaseServices):
@@ -43,7 +50,7 @@ class EnrollStudentsService(BaseServices):
         db: Session,
         model: Model,
         id_group: int,
-        id_students: StudentsIdsScheme
+        id_students: StudentsIdsScheme,
     ) -> None:
         super().__init__(db, model)
         self.id_group = id_group
@@ -55,11 +62,11 @@ class EnrollStudentsService(BaseServices):
         students_data = self._check_students(new_students)
         self.data.students.extend(students_data)
 
-    def _execute(self):
+    def _execute(self) -> dict:
         self.db.commit()
         return {'detail': 'Successful'}
 
-    def _check_group(self):
+    def _check_group(self) -> Row:
         query = select(self.model).filter_by(id=self.id_group)
         group_data = self.db.execute(query).scalar_one_or_none()
         if not group_data:
@@ -69,7 +76,7 @@ class EnrollStudentsService(BaseServices):
             )
         return group_data
 
-    def _check_new_students(self):
+    def _check_new_students(self) -> set[int]:
         query = select(Student.id).filter_by(group_id=self.id_group)
         enrolled_students = self.db.execute(query).scalars().all()
         new_students = set(self.id_students.student_ids).difference(enrolled_students)
@@ -80,7 +87,7 @@ class EnrollStudentsService(BaseServices):
             )
         return new_students
 
-    def _check_students(self, new_students: set):
+    def _check_students(self, new_students: set) -> Sequence:
         query = select(Student).filter(Student.id.in_(new_students))
         students_data = self.db.execute(query).scalars().all()
         if len(students_data) != len(new_students):
@@ -97,7 +104,7 @@ class ExpelStudentsService(BaseServices):
         db: Session,
         model: Model,
         id_students: StudentsIdsScheme,
-        id_group: int
+        id_group: int,
     ):
         super().__init__(db, model)
         self.id_students = id_students
@@ -110,10 +117,10 @@ class ExpelStudentsService(BaseServices):
         students_data = self.db.query(Student).filter(Student.id.in_(updated_enrolled_students)).all()
         group_data.students = students_data
 
-    def _execute(self):
+    def _execute(self) -> None:
         self.db.commit()
 
-    def _check_group(self):
+    def _check_group(self) -> Row:
         query = select(self.model).filter_by(id=self.id_group)
         group_data = self.db.execute(query).scalar_one_or_none()
         if not group_data:
@@ -123,18 +130,16 @@ class ExpelStudentsService(BaseServices):
             )
         return group_data
 
-    def _check_students(self):
+    def _check_students(self) -> None:
         query = select(Student.id).filter(Student.id.in_(self.id_students.student_ids))
         check_students = self.db.execute(query).scalars().all()
-        print(f'{check_students=}')
-        print(f'{self.id_students.student_ids=}')
         if len(check_students) != len(self.id_students.student_ids):
             raise HTTPException(
                 detail="Some students don't found",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-    def _check_enrolled_students(self):
+    def _check_enrolled_students(self) -> set[Row, RowMapping]:
         query = select(Student.id).filter_by(group_id=self.id_group)
         enrolled_students = self.db.execute(query).scalars().all()
         updated_enrolled_students = set(enrolled_students).difference(set(self.id_students.student_ids))

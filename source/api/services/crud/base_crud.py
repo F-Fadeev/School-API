@@ -1,14 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Sequence, Any
+from typing import TypeVar, Any
 
 from sqlalchemy.orm import Session
-from sqlalchemy import (
-    insert,
-    delete,
-    update,
-    select,
-)
-
 
 from source.db.models import (
     Student,
@@ -23,7 +16,7 @@ Model = TypeVar('Model', type[Student], type[Group], type[Course], type[associat
 
 class BaseServices(ABC):
 
-    def __init__(self, db: Session, model: Model):
+    def __init__(self, db: 'Session', model: Model) -> None:
         self.db = db
         self.model = model
         self.data = None

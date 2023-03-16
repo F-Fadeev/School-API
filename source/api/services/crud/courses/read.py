@@ -1,4 +1,5 @@
-from sqlalchemy import select, func
+from fastapi import HTTPException, status
+from sqlalchemy import select, func, ScalarResult, Sequence
 from sqlalchemy.orm import Session
 
 from source.api.services.crud.base_crud import BaseServices, Model
@@ -9,13 +10,12 @@ class GetFilteredCoursesService(BaseServices):
 
     def __init__(self, db: Session, model: Model, count_students: int) -> None:
         super().__init__(db, model)
-
         self.count_students = count_students
 
     def _validate(self) -> None:
         return
 
-    def _execute(self):
+    def _execute(self) -> Sequence:
         query = select(self.model)
         if self.count_students:
             filter_ = (
@@ -34,10 +34,16 @@ class GetSpecificCourseService(BaseServices):
         self.course_id = course_id
 
     def _validate(self) -> None:
-        return
+        data = select(self.model).filter_by(id=self.course_id)
+        course = self.db.execute(data).scalar_one_or_none()
+        if not course:
+            raise HTTPException(
+                detail='Course not found',
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
 
-    def _execute(self):
-        query = select(self.model).filter(self.model.id == self.course_id)
+    def _execute(self) -> ScalarResult:
+        query = select(self.model).filter_by(id=self.course_id)
         return self.db.execute(query).scalars().first()
 
 

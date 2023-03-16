@@ -1,8 +1,10 @@
-from sqlalchemy import insert
+from sqlalchemy import insert, Row
 from sqlalchemy.orm import Session
 
-from source.api.schemas.groups_schemas import GroupCreateScheme
 from source.api.services.crud.base_crud import BaseServices, Model
+from source.api.schemas.groups_schemas import GroupCreateScheme
+
+
 
 
 class CreateGroupService(BaseServices):
@@ -11,7 +13,7 @@ class CreateGroupService(BaseServices):
         db: Session,
         model: Model,
         return_values: list[str],
-        scheme: GroupCreateScheme
+        scheme: GroupCreateScheme,
     ) -> None:
         super().__init__(db, model)
         self.return_values = return_values
@@ -20,10 +22,9 @@ class CreateGroupService(BaseServices):
     def _validate(self) -> None:
         pass
 
-    def _execute(self):
+    def _execute(self) -> Row:
         fields = [getattr(self.model, value) for value in self.return_values]
         data = insert(self.model).values(**self.scheme.dict()).returning(*fields)
         result = self.db.execute(data).one()
         self.db.commit()
         return result
-

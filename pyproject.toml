@@ -6,7 +6,6 @@ ignore = [
     # [docstrings]
     # Ignore google docstring format
     "D",
-
     # [flake8-annotations]
     # Missing type annotation for self in method
     "ANN101",
@@ -18,6 +17,7 @@ ignore = [
     "ANN003",
     # Missing type annotation for special method "init()"
     "ANN204",
+    "ANN401",
 
     # [flake8-isort]
     # Ignore import in the wrong position
@@ -26,7 +26,7 @@ ignore = [
     # [flake8-bandit]
     # Ignore hardcoded password
     "S105",
-
+    "B008",
     # Ignore raise from raise
     "B904",
 
@@ -41,7 +41,11 @@ ignore = [
     # Assign string to variable before exception
     "EM101",
     "INP001",
-    "A003"
+    "A003",
+    "PLR0913",
+    "TCH001",
+    "TCH002",
+    "TCH003",
 ]
 
 exclude = [

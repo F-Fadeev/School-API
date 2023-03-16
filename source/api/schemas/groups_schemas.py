@@ -9,8 +9,8 @@ class GroupScheme(BaseModel):
 
 
 class GroupCreateScheme(BaseModel):
-    name: str
+    name: str = Field(max_length=10)
 
 
 class GroupUpdateScheme(BaseModel):
-    name: str = Field(default=None)
+    name: str = Field(default=None, max_length=10)

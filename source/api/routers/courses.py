@@ -5,23 +5,33 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 
-
 from source.api.schemas.base_schemas import (
     DefaultResponseScheme,
     ErrorResponseScheme,
 )
+from source.api.schemas.students_schemas import StudentsIdsScheme
 from source.api.services.crud.courses.update import UpdateCourseService
 from source.api.services.utils import get_db
-from source.api.services.crud.courses.create import EnrolUserCourseService, CreateCourseService
-from source.api.services.crud.courses.read import GetFilteredCoursesService, GetSpecificCourseService
-from source.api.services.crud.courses.delete import ExpelUserCoursesService, DeleteCourseService
+from source.api.services.crud.courses.create import (
+    EnrolCourseService,
+    CreateCourseService,
+)
+from source.api.services.crud.courses.read import (
+    GetFilteredCoursesService,
+    GetSpecificCourseService,
+)
+from source.api.services.crud.courses.delete import (
+    ExpelCourseService,
+    DeleteCourseService,
+)
 from source.api.schemas.courses_schemas import (
     CourseScheme,
     CourseCreateScheme,
     CourseUpdateScheme,
 )
-from source.api.schemas.students_schemas import StudentsIdsScheme
+
 from source.db.models import Course
+
 
 courses_router = APIRouter(prefix='/api/courses', tags=['Courses'])
 
@@ -93,7 +103,7 @@ def update_course(
         db=db,
         scheme=scheme,
         id_course=id_course,
-        return_values=['id', 'name', 'description']
+        return_values=['id', 'name', 'description'],
     )
 
     return service()
@@ -110,8 +120,7 @@ def enrolling_students_to_course(
     id_students: StudentsIdsScheme,
     db: Session = Depends(get_db),
 ) -> dict:
-
-    service = EnrolUserCourseService(
+    service = EnrolCourseService(
         db=db,
         model=Course,
         id_students=id_students,
@@ -131,7 +140,7 @@ def expel_students_from_course(
         id_students: StudentsIdsScheme,
         db: Session = Depends(get_db),
 ) -> None:
-    service = ExpelUserCoursesService(
+    service = ExpelCourseService(
         db=db,
         model=Course,
         id_students=id_students,

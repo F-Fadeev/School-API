@@ -1,4 +1,5 @@
-from sqlalchemy import select, func
+from fastapi import HTTPException, status
+from sqlalchemy import select, func, ScalarResult, Sequence
 from sqlalchemy.orm import Session
 
 from source.api.services.crud.base_crud import BaseServices, Model
@@ -13,7 +14,7 @@ class GetFilteredGroupsService(BaseServices):
     def _validate(self) -> None:
         pass
 
-    def _execute(self):
+    def _execute(self) -> Sequence:
         if self.count_students:
             query = select(self.model) \
                 .join(self.model.students) \
@@ -32,8 +33,14 @@ class GetSpecificGroupService(BaseServices):
         self.db = db
 
     def _validate(self) -> None:
-        pass
+        data = select(self.model).filter(self.model.id == self.group_id)
+        group = self.db.execute(data).scalar_one_or_none()
+        if not group:
+            raise HTTPException(
+                detail='Group not found',
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
 
-    def _execute(self):
+    def _execute(self) -> ScalarResult:
         query = select(self.model).filter(self.model.id == self.group_id)
         return self.db.execute(query).scalars().first()
