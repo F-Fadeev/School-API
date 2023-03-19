@@ -18,6 +18,7 @@ ignore = [
     # Missing type annotation for special method "init()"
     "ANN204",
     "ANN401",
+    "FBT003",
 
     # [flake8-isort]
     # Ignore import in the wrong position

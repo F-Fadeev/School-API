@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from source.api.services.crud.base_crud import BaseServices, Model
 
 
-
 class DeleteGroupService(BaseServices):
     def __init__(self, db: Session, model: Model, id_group: int):
         super().__init__(db, model)

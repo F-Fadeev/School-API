@@ -5,35 +5,34 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 
+from source.api.auth.auth_bearer import JWTBearer
 from source.api.schemas.base_schemas import (
     DefaultResponseScheme,
     ErrorResponseScheme,
-)
-from source.api.schemas.students_schemas import StudentsIdsScheme
-from source.api.services.crud.courses.update import UpdateCourseService
-from source.api.services.utils import get_db
-from source.api.services.crud.courses.create import (
-    EnrolCourseService,
-    CreateCourseService,
-)
-from source.api.services.crud.courses.read import (
-    GetFilteredCoursesService,
-    GetSpecificCourseService,
-)
-from source.api.services.crud.courses.delete import (
-    ExpelCourseService,
-    DeleteCourseService,
 )
 from source.api.schemas.courses_schemas import (
     CourseScheme,
     CourseCreateScheme,
     CourseUpdateScheme,
 )
-
+from source.api.schemas.students_schemas import StudentsIdsScheme
+from source.api.services.crud.courses.create import (
+    EnrolCourseService,
+    CreateCourseService,
+)
+from source.api.services.crud.courses.delete import (
+    ExpelCourseService,
+    DeleteCourseService,
+)
+from source.api.services.crud.courses.read import (
+    GetFilteredCoursesService,
+    GetSpecificCourseService,
+)
+from source.api.services.crud.courses.update import UpdateCourseService
+from source.api.services.utils import get_db
 from source.db.models import Course
 
-
-courses_router = APIRouter(prefix='/api/courses', tags=['Courses'])
+courses_router = APIRouter(prefix='/api/courses', tags=['Courses'], dependencies=[Depends(JWTBearer())])
 
 
 @courses_router.get(

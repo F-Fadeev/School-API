@@ -1,10 +1,8 @@
 from sqlalchemy import insert, Row
 from sqlalchemy.orm import Session
 
-from source.api.services.crud.base_crud import BaseServices, Model
 from source.api.schemas.groups_schemas import GroupCreateScheme
-
-
+from source.api.services.crud.base_crud import BaseServices, Model
 
 
 class CreateGroupService(BaseServices):

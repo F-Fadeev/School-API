@@ -2,8 +2,8 @@ from fastapi import HTTPException, status
 from sqlalchemy import update, select, Row
 from sqlalchemy.orm import Session
 
-from source.api.services.crud.base_crud import BaseServices, Model
 from source.api.schemas.courses_schemas import CourseUpdateScheme
+from source.api.services.crud.base_crud import BaseServices, Model
 
 
 class UpdateCourseService(BaseServices):

@@ -1,8 +1,8 @@
 from sqlalchemy import insert, Row
 from sqlalchemy.orm import Session
 
-from source.api.services.crud.base_crud import BaseServices, Model
 from source.api.schemas.students_schemas import StudentCreateScheme
+from source.api.services.crud.base_crud import BaseServices, Model
 
 
 class CreateStudentService(BaseServices):

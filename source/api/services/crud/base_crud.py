@@ -10,7 +10,6 @@ from source.db.models import (
     association_table,
 )
 
-
 Model = TypeVar('Model', type[Student], type[Group], type[Course], type[association_table])
 
 

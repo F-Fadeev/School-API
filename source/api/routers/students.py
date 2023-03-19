@@ -1,10 +1,16 @@
-from sqlalchemy.orm import Session
 from fastapi import (
     APIRouter,
     Depends,
     status,
 )
+from sqlalchemy.orm import Session
 
+from source.api.schemas.students_schemas import (
+    StudentScheme,
+    StudentCreateScheme,
+    StudentUpdateScheme,
+    StudentFilters,
+)
 from source.api.services.crud.students.create import CreateStudentService
 from source.api.services.crud.students.delete import DeleteStudentService
 from source.api.services.crud.students.read import (
@@ -13,14 +19,7 @@ from source.api.services.crud.students.read import (
 )
 from source.api.services.crud.students.update import UpdateStudentService
 from source.api.services.utils import get_db
-from source.api.schemas.students_schemas import (
-    StudentScheme,
-    StudentCreateScheme,
-    StudentUpdateScheme,
-    StudentFilters,
-)
 from source.db.models import Student
-
 
 students_router = APIRouter(prefix='/api/students', tags=['Students'])
 

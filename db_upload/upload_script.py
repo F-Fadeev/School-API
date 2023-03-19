@@ -1,14 +1,14 @@
-from sqlalchemy import insert
 from random import choice, randint
 
+from sqlalchemy import insert
+
+from db_upload.school_data import first_names, last_names, middle_names, groups, courses
 from source.db.database import session
 from source.db.models import Student, Group, Course
-from db_upload.school_data import first_names, last_names, middle_names, groups, courses
 
 
 def load_data() -> None:
     s = session()
-
     try:
         data = insert(Group).values([{'name': value} for value in groups])
         result = s.execute(data)
@@ -39,7 +39,6 @@ def load_data() -> None:
         s.rollback()
     finally:
         s.close()
-
 
 
 if __name__ == '__main__':

@@ -2,13 +2,13 @@ from typing import Any
 
 from fastapi import HTTPException
 from sqlalchemy import select, insert, Row, Sequence
-from starlette import status
 from sqlalchemy.orm import Session
+from starlette import status
 
-from source.api.services.crud.base_crud import BaseServices, Model
-from source.db.models import Student, association_table
 from source.api.schemas.courses_schemas import CourseCreateScheme
 from source.api.schemas.students_schemas import StudentsIdsScheme
+from source.api.services.crud.base_crud import BaseServices, Model
+from source.db.models import Student, association_table
 
 
 class EnrolCourseService(BaseServices):

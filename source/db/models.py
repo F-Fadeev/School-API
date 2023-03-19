@@ -1,3 +1,4 @@
+
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -11,7 +12,6 @@ from sqlalchemy.orm import (
 )
 
 from source.db.database import Base
-
 
 association_table = Table(
     'association_table',
@@ -63,3 +63,14 @@ class Course(Base):
         secondary=association_table,
         back_populates='courses',
     )
+
+
+class Users(Base):
+    __tablename__ = 'users'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    surname: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(100), nullable=False)
+    is_active: Mapped[bool] = mapped_column(default=True)
+    password: Mapped[str] = mapped_column(String(100), nullable=False)
+

@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from source.api.schemas.students_schemas import StudentsIdsScheme
 from source.api.schemas.base_schemas import (
     ErrorResponseScheme,
     DefaultResponseScheme,
 )
+from source.api.schemas.groups_schemas import (
+    GroupScheme,
+    GroupCreateScheme,
+    GroupUpdateScheme,
+)
+from source.api.schemas.students_schemas import StudentsIdsScheme
 from source.api.services.crud.groups.create import CreateGroupService
 from source.api.services.crud.groups.delete import DeleteGroupService
 from source.api.services.crud.groups.read import (
@@ -18,13 +23,7 @@ from source.api.services.crud.groups.update import (
     ExpelStudentsService,
 )
 from source.api.services.utils import get_db
-from source.api.schemas.groups_schemas import (
-    GroupScheme,
-    GroupCreateScheme,
-    GroupUpdateScheme,
-)
 from source.db.models import Group
-
 
 groups_router = APIRouter(prefix='/api/groups', tags=['Groups'])
 

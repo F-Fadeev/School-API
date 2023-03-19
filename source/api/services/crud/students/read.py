@@ -4,9 +4,9 @@ from fastapi import HTTPException, status
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
+from source.api.schemas.students_schemas import StudentFilters
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Course
-from source.api.schemas.students_schemas import StudentFilters
 
 
 class GetFilteredStudentsService(BaseServices):
@@ -38,8 +38,8 @@ class GetSpecificStudentService(BaseServices):
 
     def _validate(self) -> None:
         data = select(self.model).filter(self.model.id == self.student_id)
-        group = self.db.execute(data).scalar_one_or_none()
-        if not group:
+        student = self.db.execute(data).scalar_one_or_none()
+        if not student:
             raise HTTPException(
                 detail='Student not found',
                 status_code=status.HTTP_404_NOT_FOUND,

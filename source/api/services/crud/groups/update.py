@@ -2,10 +2,10 @@ from fastapi import HTTPException, status
 from sqlalchemy import update, select, Row, RowMapping, Sequence
 from sqlalchemy.orm import Session
 
+from source.api.schemas.groups_schemas import GroupUpdateScheme
+from source.api.schemas.students_schemas import StudentsIdsScheme
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Student
-from source.api.schemas.students_schemas import StudentsIdsScheme
-from source.api.schemas.groups_schemas import GroupUpdateScheme
 
 
 class UpdateGroupService(BaseServices):
