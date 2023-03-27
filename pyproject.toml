@@ -1,0 +1,78 @@
+[tool.ruff]
+line-length = 120
+select = ["ALL"]
+
+ignore = [
+    # [docstrings]
+    # Ignore google docstring format
+    "D",
+    # [flake8-annotations]
+    # Missing type annotation for self in method
+    "ANN101",
+    # Missing type annotation for cls in classmethod
+    "ANN102",
+    # Missing type annotation for args
+    "ANN002",
+    # Missing type annotation for kwargs
+    "ANN003",
+    # Missing type annotation for special method "init()"
+    "ANN204",
+    "ANN401",
+    "FBT003",
+
+    # [flake8-isort]
+    # Ignore import in the wrong position
+    "I001",
+
+    # [flake8-bandit]
+    # Ignore hardcoded password
+    "S105",
+    "S101",
+    "B008",
+    # Ignore raise from raise
+    "B904",
+
+    # Ignore catch Exception
+    "BLE001",
+
+    # Ignore string/docstring/comment contains unicode character
+    "RUF001",
+    "RUF002",
+    "RUF003",
+
+    # Assign string to variable before exception
+    "EM101",
+    "INP001",
+    "A003",
+    "PLR0913",
+    "TCH001",
+    "TCH002",
+    "TCH003",
+]
+
+exclude = [
+    ".git",
+    "pycache",
+    ".venv",
+    "source/db/migrations/",
+    "tests/",
+]
+
+target-version = "py311"
+
+[tool.ruff.per-file-ignores]
+"*/__init__.py" = ["F401"]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+multiline-quotes = "double"
+
+[tool.ruff.isort]
+combine-as-imports = true
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["classmethod"]
+
+[tool.ruff.mccabe]
+max-complexity = 18
