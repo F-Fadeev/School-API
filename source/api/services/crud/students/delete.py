@@ -6,7 +6,7 @@ from source.api.services.crud.base_crud import BaseServices, Model
 
 
 class DeleteStudentService(BaseServices):
-    def __init__(self, db: 'Session', model: Model, id_student: int):
+    def __init__(self, db: Session, model: Model, id_student: int):
         super().__init__(db, model)
         self.id_student = id_student
 

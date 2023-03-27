@@ -5,6 +5,7 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 
+from source.api.auth.auth_bearer import JWTBearer
 from source.api.schemas.students_schemas import (
     StudentScheme,
     StudentCreateScheme,
@@ -21,7 +22,7 @@ from source.api.services.crud.students.update import UpdateStudentService
 from source.api.services.utils import get_db
 from source.db.models import Student
 
-students_router = APIRouter(prefix='/api/students', tags=['Students'])
+students_router = APIRouter(prefix='/api/students', tags=['Students'], dependencies=[Depends(JWTBearer())])
 
 
 @students_router.get(
@@ -33,7 +34,7 @@ def get_all_students(
     filter_param: StudentFilters = Depends(StudentFilters),
     db: Session = Depends(get_db),
 ) -> list[StudentScheme]:
-    service = GetFilteredStudentsService(db, Student, filter_param)
+    service = GetFilteredStudentsService(db=db, model=Student, filter_param=filter_param)
     return service()
 
 
@@ -51,7 +52,7 @@ def get_specific_student(
 
 
 @students_router.post(
-    '',
+    '/create',
     status_code=status.HTTP_201_CREATED,
     response_model=StudentScheme,
 )

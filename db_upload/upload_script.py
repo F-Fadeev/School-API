@@ -1,19 +1,23 @@
 from random import choice, randint
 
-from sqlalchemy import insert
+from sqlalchemy import insert, create_engine
+from sqlalchemy.orm import sessionmaker
 
+from config import settings
 from db_upload.school_data import first_names, last_names, middle_names, groups, courses
-from source.db.database import session
+from source.db.database import Base
 from source.db.models import Student, Group, Course
+
+engine = create_engine(settings.get_database_url())
+Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def load_data() -> None:
-    s = session()
+    s = Session()
     try:
         data = insert(Group).values([{'name': value} for value in groups])
-        result = s.execute(data)
-        if result.rowcount == len(groups):
-            s.commit()
+        s.execute(data)
+        s.commit()
 
         data = insert(Student).values([{
             'group_id': randint(1, 10),

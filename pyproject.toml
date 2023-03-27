@@ -27,6 +27,7 @@ ignore = [
     # [flake8-bandit]
     # Ignore hardcoded password
     "S105",
+    "S101",
     "B008",
     # Ignore raise from raise
     "B904",

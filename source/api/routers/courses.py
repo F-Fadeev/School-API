@@ -128,7 +128,7 @@ def enrolling_students_to_course(
     return service()
 
 
-@courses_router.delete(
+@courses_router.post(
     '/expel/{id_course}',
     status_code=status.HTTP_204_NO_CONTENT,
     responses={status.HTTP_400_BAD_REQUEST: {'model': ErrorResponseScheme}},

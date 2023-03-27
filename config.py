@@ -3,7 +3,6 @@ from pathlib import Path
 
 from pydantic import BaseSettings, Field
 
-
 PATH_DIR = Path(__file__).parent
 
 
@@ -22,6 +21,9 @@ class Settings(BaseSettings):
 
     def get_database_url(self) -> str:
         return f'postgresql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
+
+    def get_test_db_url(self) -> str:
+        return f'postgresql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/test'
 
 
 @lru_cache

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from source.api.auth.auth_bearer import JWTBearer
 from source.api.schemas.base_schemas import (
     ErrorResponseScheme,
     DefaultResponseScheme,
@@ -25,7 +26,7 @@ from source.api.services.crud.groups.update import (
 from source.api.services.utils import get_db
 from source.db.models import Group
 
-groups_router = APIRouter(prefix='/api/groups', tags=['Groups'])
+groups_router = APIRouter(prefix='/api/groups', tags=['Groups'], dependencies=[Depends(JWTBearer())])
 
 
 @groups_router.get(
@@ -55,7 +56,7 @@ def get_specific_group(
 
 
 @groups_router.post(
-    '',
+    '/create',
     status_code=status.HTTP_201_CREATED,
     response_model=GroupScheme,
 )

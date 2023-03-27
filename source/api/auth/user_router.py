@@ -1,10 +1,10 @@
 from fastapi import Body, APIRouter, Depends
+from passlib.hash import pbkdf2_sha256
 from sqlalchemy import select, insert
 from sqlalchemy.orm import Session
-from passlib.hash import pbkdf2_sha256
 
-from source.api.schemas.user_schemas import UserSchema, UserLoginSchema
 from source.api.auth.auth_handler import sign_jwt
+from source.api.schemas.user_schemas import UserSchema, UserLoginSchema
 from source.api.services.utils import get_db
 from source.db.models import Users
 
