@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
-from source.api.schemas.students_schemas import StudentFilters, StudentScheme
+from source.api.schemas.students_schemas import StudentFilters
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Course
 
@@ -41,10 +41,9 @@ class GetSpecificStudentService(BaseServices):
 
     def _execute(self) -> Any:
         query = select(self.model).filter_by(id=self.student_id)
-        result = self.db.execute(query).scalar()
-        return result
+        return self.db.execute(query).scalar()
 
-    def _check_student(self):
+    def _check_student(self) -> None:
         data = select(self.model).filter_by(id=self.student_id)
         student = self.db.execute(data).scalar_one_or_none()
         if not student:

@@ -12,7 +12,7 @@ class UpdateCourseService(BaseServices):
         self,
         db: Session,
         model: Model,
-        return_values: list[str],
+        return_values: tuple,
         scheme: CourseUpdateScheme,
         id_course: int,
     ) -> None:

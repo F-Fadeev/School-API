@@ -1,10 +1,10 @@
 from typing import Any
 
 from fastapi import HTTPException, status
-from sqlalchemy import update, select, null
+from sqlalchemy import update, select
 from sqlalchemy.orm import Session
 
-from source.api.schemas.students_schemas import StudentUpdateScheme, StudentScheme
+from source.api.schemas.students_schemas import StudentUpdateScheme
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Group
 
@@ -15,7 +15,7 @@ class UpdateStudentService(BaseServices):
         db: Session,
         model: Model,
         scheme: StudentUpdateScheme,
-        return_values: list,
+        return_values: tuple,
         id_student: int,
     ) -> None:
         super().__init__(db, model)
@@ -37,7 +37,7 @@ class UpdateStudentService(BaseServices):
             return result
         return None
 
-    def _check_group(self):
+    def _check_group(self) -> None:
         if self.scheme.group_id is not None:
             query = select(Group).filter_by(id=self.scheme.group_id)
             group_data = self.db.execute(query).one_or_none()
@@ -47,7 +47,7 @@ class UpdateStudentService(BaseServices):
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
 
-    def _check_student(self):
+    def _check_student(self) -> None:
         data = select(self.model).filter(self.model.id == self.id_student)
         result = self.db.execute(data).scalar_one_or_none()
         if not result:

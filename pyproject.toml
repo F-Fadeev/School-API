@@ -55,6 +55,7 @@ exclude = [
     "pycache",
     ".venv",
     "source/db/migrations/",
+    "tests/",
 ]
 
 target-version = "py311"

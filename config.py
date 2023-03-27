@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     DB_NAME: str = Field(..., env='DB_NAME')
     JWT_SECRET: str = Field(..., env='JWT_SECRET')
     JWT_ALGORITHM: str = Field(..., env='JWT_ALGORITHM')
+    JWT_EXPIRE: int = Field(..., env='JWT_EXPIRE')
 
     class Config:
         env_file = f'{PATH_DIR}/.env'

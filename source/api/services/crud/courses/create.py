@@ -61,7 +61,7 @@ class EnrolCourseService(BaseServices):
 
 
 class CreateCourseService(BaseServices):
-    def __init__(self, db: Session, model: Model, return_values: list[str], scheme: CourseCreateScheme):
+    def __init__(self, db: Session, model: Model, return_values: tuple, scheme: CourseCreateScheme):
         super().__init__(db, model)
         self.return_values = return_values
         self.scheme = scheme

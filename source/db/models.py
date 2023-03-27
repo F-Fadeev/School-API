@@ -9,7 +9,6 @@ from sqlalchemy.orm import (
     relationship,
     Mapped,
     mapped_column,
-    class_mapper
 )
 
 from source.db.database import Base
@@ -48,7 +47,7 @@ class Student(Base):
     )
     first_name: Mapped[str] = mapped_column(String(100), nullable=False)
     last_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    middle_name: Mapped[str] = mapped_column(String(100), default='')
+    middle_name: Mapped[str] = mapped_column(String(100), nullable=True)
     courses: Mapped[list['Course']] = relationship(
         secondary=association_table,
         back_populates='students',
@@ -59,12 +58,11 @@ class Course(Base):
     __tablename__ = 'courses'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(20), nullable=False)
-    description: Mapped[str] = mapped_column(String(250), default='')
+    description: Mapped[str] = mapped_column(String(250), default='', nullable=True)
     students: Mapped[list[Student]] = relationship(
         secondary=association_table,
         back_populates='courses',
     )
-
 
 class Users(Base):
     __tablename__ = 'users'

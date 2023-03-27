@@ -10,7 +10,7 @@ class CreateGroupService(BaseServices):
         self,
         db: Session,
         model: Model,
-        return_values: list[str],
+        return_values: tuple,
         scheme: GroupCreateScheme,
     ) -> None:
         super().__init__(db, model)

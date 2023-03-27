@@ -1,9 +1,7 @@
-from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
 
-
-from source.db.models import Student, Group, Course, Users
+from source.db.models import Student, Group, Course
 
 
 def load_test_data(get_session: Session) -> None:

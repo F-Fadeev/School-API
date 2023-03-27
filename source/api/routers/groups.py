@@ -26,7 +26,11 @@ from source.api.services.crud.groups.update import (
 from source.api.services.utils import get_db
 from source.db.models import Group
 
-groups_router = APIRouter(prefix='/api/groups', tags=['Groups'], dependencies=[Depends(JWTBearer())])
+groups_router = APIRouter(
+    prefix='/api/groups',
+    tags=['Groups'],
+    dependencies=[Depends(JWTBearer())],
+)
 
 
 @groups_router.get(
@@ -38,7 +42,11 @@ def get_all_groups(
     count_students: int = None,
     db: Session = Depends(get_db),
 ) -> list[GroupScheme]:
-    service = GetFilteredGroupsService(db=db, model=Group, count_students=count_students)
+    service = GetFilteredGroupsService(
+        db=db,
+        model=Group,
+        count_students=count_students,
+    )
     return service()
 
 
@@ -51,7 +59,11 @@ def get_specific_group(
     group_id: int,
     db: Session = Depends(get_db),
 ) -> GroupScheme:
-    service = GetSpecificGroupService(db=db, model=Group, group_id=group_id)
+    service = GetSpecificGroupService(
+        db=db,
+        model=Group,
+        group_id=group_id,
+    )
     return service()
 
 
@@ -64,7 +76,12 @@ def create_group(
     group: GroupCreateScheme,
     db: Session = Depends(get_db),
 ) -> GroupScheme:
-    service = CreateGroupService(db=db, model=Group, scheme=group, return_values=['id', 'name'])
+    service = CreateGroupService(
+        db=db,
+        model=Group,
+        scheme=group,
+        return_values=('id', 'name'),
+    )
     return service()
 
 
@@ -77,7 +94,11 @@ def delete_group(
     id_group: int,
     db: Session = Depends(get_db),
 ) -> None:
-    service = DeleteGroupService(db=db, model=Group, id_group=id_group)
+    service = DeleteGroupService(
+        db=db,
+        model=Group,
+        id_group=id_group,
+    )
     return service()
 
 
@@ -91,7 +112,13 @@ def update_group(
     scheme: GroupUpdateScheme,
     db: Session = Depends(get_db),
 ) -> None | GroupScheme:
-    service = UpdateGroupService(db=db, model=Group, scheme=scheme, id_group=id_group, return_values=['id', 'name'])
+    service = UpdateGroupService(
+        db=db,
+        model=Group,
+        scheme=scheme,
+        id_group=id_group,
+        return_values=('id', 'name'),
+    )
     return service()
 
 
@@ -106,7 +133,12 @@ def enrolling_students_to_group(
     id_students: StudentsIdsScheme,
     db: Session = Depends(get_db),
 ) -> dict:
-    service = EnrollStudentsService(db=db, model=Group, id_group=id_group, id_students=id_students)
+    service = EnrollStudentsService(
+        db=db,
+        model=Group,
+        id_group=id_group,
+        id_students=id_students,
+    )
     return service()
 
 
@@ -121,5 +153,10 @@ def expel_students_from_group(
     id_students: StudentsIdsScheme,
     db: Session = Depends(get_db),
 ) -> None:
-    service = ExpelStudentsService(db=db, model=Group, id_group=id_group, id_students=id_students)
+    service = ExpelStudentsService(
+        db=db,
+        model=Group,
+        id_group=id_group,
+        id_students=id_students,
+    )
     return service()

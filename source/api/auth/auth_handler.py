@@ -7,10 +7,11 @@ from config import settings
 
 JWT_SECRET = settings.JWT_SECRET
 JWT_ALGORITHM = settings.JWT_ALGORITHM
+JWT_EXPIRE = settings.JWT_EXPIRE
 
 
 def sign_jwt() -> dict[str, str]:
-    token_expire = 600
+    token_expire = JWT_EXPIRE
     payload = {
         'expires': time.time() + token_expire,
     }

@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker
 
 from config import settings
 from db_upload.school_data import first_names, last_names, middle_names, groups, courses
-from source.db.database import Base
 from source.db.models import Student, Group, Course
 
 engine = create_engine(settings.get_database_url())

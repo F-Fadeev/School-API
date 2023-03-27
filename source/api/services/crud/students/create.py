@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import insert, Row, select
 from sqlalchemy.orm import Session
 
-from source.api.schemas.students_schemas import StudentCreateScheme, StudentScheme
+from source.api.schemas.students_schemas import StudentCreateScheme
 from source.api.services.crud.base_crud import BaseServices, Model
 from source.db.models import Group
 
@@ -12,7 +12,7 @@ class CreateStudentService(BaseServices):
         self,
         db: Session,
         model: Model,
-        return_values: list[str],
+        return_values: tuple,
         scheme: StudentCreateScheme,
     ) -> None:
         super().__init__(db, model)
@@ -29,7 +29,7 @@ class CreateStudentService(BaseServices):
         self.db.commit()
         return result
 
-    def _check_group(self):
+    def _check_group(self) -> None:
         if self.scheme.group_id is not None:
             query = select(Group).filter_by(id=self.scheme.group_id)
             group_data = self.db.execute(query).scalar_one_or_none()

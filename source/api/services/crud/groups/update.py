@@ -13,7 +13,7 @@ class UpdateGroupService(BaseServices):
         self,
         db: Session,
         model: Model,
-        return_values: list[str],
+        return_values: tuple,
         scheme: GroupUpdateScheme,
         id_group: int,
     ) -> None:

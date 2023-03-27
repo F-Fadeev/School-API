@@ -32,7 +32,11 @@ from source.api.services.crud.courses.update import UpdateCourseService
 from source.api.services.utils import get_db
 from source.db.models import Course
 
-courses_router = APIRouter(prefix='/api/courses', tags=['Courses'], dependencies=[Depends(JWTBearer())])
+courses_router = APIRouter(
+    prefix='/api/courses',
+    tags=['Courses'],
+    dependencies=[Depends(JWTBearer())],
+)
 
 
 @courses_router.get(
@@ -44,7 +48,11 @@ def get_all_courses(
     count_students: int = None,
     db: Session = Depends(get_db),
 ) -> list[CourseScheme]:
-    service = GetFilteredCoursesService(db=db, model=Course, count_students=count_students)
+    service = GetFilteredCoursesService(
+        db=db,
+        model=Course,
+        count_students=count_students,
+    )
     return service()
 
 
@@ -57,7 +65,11 @@ def get_specific_course(
     course_id: int,
     db: Session = Depends(get_db),
 ) -> CourseScheme:
-    service = GetSpecificCourseService(db=db, model=Course, course_id=course_id)
+    service = GetSpecificCourseService(
+        db=db,
+        model=Course,
+        course_id=course_id,
+    )
     return service()
 
 
@@ -70,7 +82,12 @@ def create_course(
     scheme: CourseCreateScheme,
     db: Session = Depends(get_db),
 ) -> CourseScheme:
-    service = CreateCourseService(db=db, model=Course, scheme=scheme, return_values=['id', 'name', 'description'])
+    service = CreateCourseService(
+        db=db,
+        model=Course,
+        scheme=scheme,
+        return_values=('id', 'name', 'description'),
+    )
     return service()
 
 
@@ -83,7 +100,10 @@ def delete_course(
     id_course: int,
     db: Session = Depends(get_db),
 ) -> None:
-    service = DeleteCourseService(db=db, model=Course, id_course=id_course)
+    service = DeleteCourseService(
+        db=db,
+        model=Course,
+        id_course=id_course)
     return service()
 
 
@@ -102,7 +122,7 @@ def update_course(
         db=db,
         scheme=scheme,
         id_course=id_course,
-        return_values=['id', 'name', 'description'],
+        return_values=('id', 'name', 'description'),
     )
 
     return service()

@@ -22,7 +22,11 @@ from source.api.services.crud.students.update import UpdateStudentService
 from source.api.services.utils import get_db
 from source.db.models import Student
 
-students_router = APIRouter(prefix='/api/students', tags=['Students'], dependencies=[Depends(JWTBearer())])
+students_router = APIRouter(
+    prefix='/api/students',
+    tags=['Students'],
+    dependencies=[Depends(JWTBearer())],
+)
 
 
 @students_router.get(
@@ -34,7 +38,11 @@ def get_all_students(
     filter_param: StudentFilters = Depends(StudentFilters),
     db: Session = Depends(get_db),
 ) -> list[StudentScheme]:
-    service = GetFilteredStudentsService(db=db, model=Student, filter_param=filter_param)
+    service = GetFilteredStudentsService(
+        db=db,
+        model=Student,
+        filter_param=filter_param,
+    )
     return service()
 
 
@@ -47,7 +55,11 @@ def get_specific_student(
     student_id: int,
     db: Session = Depends(get_db),
 ) -> StudentScheme:
-    service = GetSpecificStudentService(db=db, model=Student, student_id=student_id)
+    service = GetSpecificStudentService(
+        db=db,
+        model=Student,
+        student_id=student_id,
+    )
     return service()
 
 
@@ -64,7 +76,7 @@ def create_student(
         db=db,
         model=Student,
         scheme=student,
-        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name'],
+        return_values=('id', 'group_id', 'first_name', 'last_name', 'middle_name'),
     )
     return service()
 
@@ -78,7 +90,11 @@ def delete_student(
     id_student: int,
     db: Session = Depends(get_db),
 ) -> None:
-    service = DeleteStudentService(db=db, model=Student, id_student=id_student)
+    service = DeleteStudentService(
+        db=db,
+        model=Student,
+        id_student=id_student,
+    )
     return service()
 
 
@@ -97,6 +113,6 @@ def update_student(
         db=db,
         scheme=scheme,
         id_student=id_student,
-        return_values=['id', 'group_id', 'first_name', 'last_name', 'middle_name'],
+        return_values=('id', 'group_id', 'first_name', 'last_name', 'middle_name'),
     )
     return service()
