@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - dev
 
 jobs:
   tests:
@@ -14,8 +17,8 @@ jobs:
         image: postgres:15.1-alpine
         env:
           POSTGRES_DB: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: ${{ vars.DB_USER }}
+          POSTGRES_PASSWORD: ${{ vars.DB_PASS }}
         ports: [ '5432:5432' ]
 
     steps:
@@ -33,11 +36,11 @@ jobs:
       run: |
         pytest
       env:
-        DB_USER: postgres
-        DB_PASS: postgres
+        DB_USER: ${{ vars.DB_USER }}
+        DB_PASS: ${{ vars.DB_PASS }}
         DB_HOST: localhost
         DB_PORT: 5432
-        DB_NAME: school
+        DB_NAME: ${{ vars.DB_NAME }}
         JWT_SECRET: ${{ github.sha }}
         JWT_ALGORITHM: HS256
         JWT_EXPIRE: 600
