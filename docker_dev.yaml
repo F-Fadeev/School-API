@@ -1,0 +1,18 @@
+version: '3'
+services:
+    postgres:
+      image: postgres:15.2-alpine
+      restart: always
+      container_name: school-postgres
+      environment:
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASS}
+        POSTGRES_DB: ${DB_NAME}
+      ports:
+        - "5432:5432"
+      volumes:
+        - PGdata:/var/lib/postgresql/data
+
+volumes:
+    PGdata:
+

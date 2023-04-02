@@ -1,6 +1,13 @@
-from fastapi import Body, APIRouter, Depends
+from fastapi import (
+    Body,
+    APIRouter,
+    Depends,
+    HTTPException,
+    status,
+)
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy import select, insert
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from source.api.auth.auth_handler import sign_jwt
@@ -16,7 +23,13 @@ def create_user(user: UserSchema = Body(...), db: Session = Depends(get_db)) -> 
     prepare_data = user.dict()
     prepare_data['password'] = pbkdf2_sha256.hash(user.password)
     data = insert(Users).values(**prepare_data)
-    db.execute(data)
+    try:
+        db.execute(data)
+    except IntegrityError:
+        raise HTTPException(
+            detail='User with this e-mail already exists',
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     db.commit()
     return sign_jwt()
 
