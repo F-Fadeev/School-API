@@ -1,0 +1,43 @@
+name: Test-api school-workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15.1-alpine
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: [ '5432:5432' ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11.1'
+
+    - name: Install dependencies
+      run: | 
+        pip install -r req.txt
+
+    - name: Test with pytest
+      run: |
+        pytest
+      env:
+        DB_USER: postgres
+        DB_PASS: 12345
+        DB_HOST: postgres
+        DB_PORT: 5432
+        DB_NAME: school
+        JWT_SECRET: ${{ github.sha }}
+        JWT_ALGORITHM: HS256
+        JWT_EXPIRE: 600
