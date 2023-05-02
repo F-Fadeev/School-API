@@ -1,1 +1,41 @@
-[![Test-api school-workflow](https://github.com/F-Fadeev/Task_11/actions/workflows/school.yml/badge.svg)](https://github.com/F-Fadeev/Task_11/actions/workflows/school.yml)
+# Shool API
+
+School-API - это RESTful API, написанный на языке Python с использованием фреймворка FastAPI и базы данных PostgreSQL. 
+API предоставляет возможность управления курсами, группами и студентами в учебном заведении.
+Проект имеет модульную структуру, что позволяет легко масштабировать и поддерживать его. 
+Он включает в себя различные слои, такие как модели, схемы, сервисы, CRUD-операции и маршрутизаторы.
+
+# Технологический стек проекта
+
+- Python 3.9
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+- Alembic
+- Docker
+- NGINX
+- JWT
+
+## Установка
+
+
+- Установить Docker
+- Склонировать репозиторий. 
+- В корневом каталоге проекта необходимо создать файл .env со следующими константами:
+  - `DB_USER` - имя пользователя PostgreSQL
+  - `DB_PASS` - пароль пользователя PostgreSQL
+  - `DB_HOST` - хост PostgreSQL
+  - `DB_PORT` - порт PostgreSQL
+  - `DB_NAME` - имя базы данных PostgreSQL
+  - `JWT_SECRET` - секретный ключ для JWT-токена
+  - `JWT_ALGORITHM` - алгоритм шифрования для JWT-токена
+  - `JWT_EXPIRE` - время жизни JWT-токена (в минутах)
+- Затем необходимо запустить контейнеры Docker с помощью команды: 
+`docker-compose -f docker_prod.yaml up -d`
+ 
+
+## Использование
+
+API сервер имеет документацию, созданную с помощью Swagger UI. 
+Чтобы получить доступ к документации, откройте браузер и перейдите по адресу `http://localhost:8000/docs`. 
+Там вы найдете список всех конечных точек API и возможность отправлять запросы к ним.
